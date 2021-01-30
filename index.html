@@ -44,6 +44,12 @@ const gamearea = {
                 gamearea.keys = gamearea.keys.slice(0, ind).concat(gamearea.keys.slice(ind+1, gamearea.keys.length))
             }
         })
+        this.map = function (){
+            img = document.createElement('img')
+            img.src = 'map.jpg'
+            this.context.drawImage(img, -100, -100)
+        }
+        this.map()
     },
     clear : function(){
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -66,6 +72,9 @@ function Player(width, height, x, y) {
         if (gamearea.keys.includes('ArrowRight')){this.speedX = 20}
         if (gamearea.keys.includes('ArrowDown')){this.speedY = 20}
 
+        if ((this.x+this.width == obs.x) && (this.y+this.height == obs.y) && (this.y == obs.y + obs.height)){
+            this.speedX = 0;
+        }
         this.x += this.speedX;
         this.y += this.speedY;        
 
@@ -93,6 +102,10 @@ function updateGameArea() {
     player.update()
 }
 
+
+function done (){
+    alert('done')
+}
 
 </script>
 </body>
