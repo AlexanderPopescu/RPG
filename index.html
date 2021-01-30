@@ -36,7 +36,10 @@ const gamearea = {
         this.canvas.width = window.innerWidth - 50;
         this.canvas.height = window.innerHeight - 50
         this.context = this.canvas.getContext("2d");
-        document.body.appendChild(this.canvas)
+
+        var parent = document.getElementById("container");
+        parent.appendChild(this.canvas);
+
         this.interval = setInterval(updateGameArea, 20);
         player = new Player(100, 100, 100, 100);
         obs = new Obstacle(200, 400, 140, 140)
