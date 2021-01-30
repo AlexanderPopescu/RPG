@@ -14,28 +14,93 @@
             height: 100%;
             overflow: hidden;
         }
-        body {
-           width: 100vh;
-           position: relative;
-        }
-        #container {
-           width: 95vh;
-           margin: 200px auto;
-        }
         canvas{
-            box-shadow: 0 0 5px black
+            box-shadow: 0 0 5px black;
             background-color: rgb(235, 235, 235);
         }
     </style>
 </head>
 <body onload="gamearea.start()">
-<div id="container">
-    <canvas id="canvas"></canvas>
-</div>
+<div id="container"></div>
 <script>
-//i think we should dynamically set width and
-//height of canvas with js
-var cvs = document.getElementById("canvas");
+
+
+
+var player;
+var obs;
+
+const gamearea = {
+    canvas : document.createElement('canvas'),
+    keys : [],
+    start : function (){
+        this.canvas.width = window.innerWidth - 50;
+        this.canvas.height = window.innerHeight - 50
+        this.context = this.canvas.getContext("2d");
+        document.body.appendChild(this.canvas)
+        this.interval = setInterval(updateGameArea, 20);
+        player = new Player(100, 100, 100, 100);
+        obs = new Obstacle(200, 400, 140, 140)
+        window.addEventListener ('keydown', ()=>{
+            k = event.keyCode;
+            if (k>36 && k<41 && !gamearea.keys.includes(event.key)){
+                gamearea.keys.push(event.key)
+            }
+        })
+        window.addEventListener('keyup', ()=>{
+            ind = gamearea.keys.indexOf(event.key)
+
+              if(gamearea.keys.includes(event.key)){
+                gamearea.keys = gamearea.keys.slice(0, ind).concat(gamearea.keys.slice(ind+1, gamearea.keys.length))
+            }
+        })
+    },
+    clear : function(){
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+}
+
+
+function Player(width, height, x, y) {
+    this.width = width;
+    this.height = height;
+    this.speedX = 0;
+    this.speedY = 0;    
+    this.x = x;
+    this.y = y;    
+    this.update = function() {
+        this.speedX = 0
+        this.speedY = 0
+        if (gamearea.keys.includes('ArrowLeft')){this.speedX = -20}
+        if (gamearea.keys.includes('ArrowUp')){this.speedY = -20}
+        if (gamearea.keys.includes('ArrowRight')){this.speedX = 20}
+        if (gamearea.keys.includes('ArrowDown')){this.speedY = 20}
+
+        this.x += this.speedX;
+        this.y += this.speedY;        
+
+        ctx = gamearea.context;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+}
+
+function Obstacle (x, y, width, height){
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.update = function (){
+
+        ctx = gamearea.context;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+}
+
+function updateGameArea() {
+    gamearea.clear();
+    obs.update()
+    player.update()
+}
+
 
 </script>
 </body>
