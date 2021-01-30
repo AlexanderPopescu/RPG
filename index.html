@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
     <title>game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        html {
+            height: 100%;
+            overflow: hidden;
+        }
         canvas{
-            border: 2px solid grey;
+            box-shadow: 0 0 5px black
             background-color: rgb(235, 235, 235);
         }
     </style>
 </head>
 <body onload="gamearea.start()">
-
+<div id="container"></div>
 <script>
 
 
