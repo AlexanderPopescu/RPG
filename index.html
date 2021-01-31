@@ -50,7 +50,8 @@ const gamearea = {
 
         this.interval = setInterval(updateGameArea, 20);
         player = new Player(100, 100, 100, 100);
-        obs = new Obstacle(200, 400, 140, 140)
+        obs = new Obstacle('obs', 200, 200, 300, 140)
+        obs2 = new Obstacle('obs2', 700, 50, 50, 250)
         window.addEventListener ('keydown', ()=>{
             k = event.keyCode;
             if (k>36 && k<41 && !gamearea.keys.includes(event.key)){
@@ -81,10 +82,31 @@ function Player(width, height, x, y) {
     this.update = function() {
         this.speedX = 0
         this.speedY = 0
-        if (gamearea.keys.includes('ArrowLeft')){this.speedX = -20}
-        if (gamearea.keys.includes('ArrowUp')){this.speedY = -20}
-        if (gamearea.keys.includes('ArrowRight')){this.speedX = 20}
-        if (gamearea.keys.includes('ArrowDown')){this.speedY = 20}
+        var left = true, up = true, right = true, down = true;
+
+        props = Object.keys(coo)  //this returns an array with all the properties of the coordinates object, so we can iterate over it with forEach()
+
+        props.forEach((obj)=>{  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! NEEDS FIXING !!!!!!!!!!!!!!!!!!!!!!!!!\\
+            let a = coo[obj], // x = the array with the coordinates
+            x = a[0]-10, y = a[1]+10, width = a[2]-10, height = a[3]-20
+
+            if (this.y + this.height >= y && this.y <= y+height && this.x > x && this.x < x+width + 30){
+               return left = false;
+            } else if (this.x + this.width >= x && this.x<=x+width && this.y+this.height>= y && this.y <= y + height){
+               return right = false;
+            } else if (this.y >= y + height && this.y <= y+height + 20  && this.x  + this.width> x && this.x <x+width){
+                return up = false
+            } else if (this.y+this.height < y && this.y + this.height > y -20 && this.x  + this.width> x && this.x <x+width){
+                return down = false
+            }
+        })
+
+
+        
+        if (left && gamearea.keys.includes('ArrowLeft')){this.speedX = -20}
+        if (up && gamearea.keys.includes('ArrowUp')){this.speedY = -20}
+        if (right && gamearea.keys.includes('ArrowRight')){this.speedX = 20}
+        if (down && gamearea.keys.includes('ArrowDown')){this.speedY = 20}
 
         this.x += this.speedX;
         this.y += this.speedY;        
@@ -94,13 +116,14 @@ function Player(width, height, x, y) {
     }
 }
 
-function Obstacle (x, y, width, height){
+function Obstacle (nm, x, y, width, height){
+    this.nm = nm;
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
     this.update = function (){
-
+        coo[this.nm] = [this.x, this.y, this.width, this.height]
         ctx = gamearea.context;
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
@@ -109,6 +132,7 @@ function Obstacle (x, y, width, height){
 function updateGameArea() {
     gamearea.clear();
     obs.update()
+    obs2.update()
     player.update()
 }
 
