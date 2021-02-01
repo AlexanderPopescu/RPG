@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+      <title>game</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no" />
+      <meta name="theme-color" content="#000000" />
+      <style type="text/css" media="all">
+         * {
+            padding: 0;
+            margin: 0;
+         }
+         html {
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+         }
+         canvas {
+            border: 1px solid red;
+         }
+      </style>
+   </head>
+   <body onload="checkOrientation();">
+      <canvas id="canvas"></canvas>
+      <script type="text/javascript" charset="utf-8">
+         var cvs = document.querySelector("canvas");
+         var ctx = cvs.getContext("2d");
+         
+         var gameOver = false;
+         var pause = false;
+         var sprites = [];
+         var spritesObject = {
+            image: undefined,
+            x: 0,
+            y: 0,
+            sourceX: 0,
+            sourceY: 0,
+            sourceWidth: 0,
+            sourceHeight: 0,
+            alpha: 1,
+            size: 0,
+            sourceSize: 0
+         };
+         
+         var control = new Image();
+         control.src = 'control_button.png';
+         
+         control.addEventListener('load', render, false);
+         
+         var screenOrientation = {
+            primary: 'portrait-primary',
+            secondary: 'landscape-primary'
+         };
+         
+         cvs.width = window.innerWidth * 0.98;
+         cvs.height = window.innerHeight * 0.95;
+         
+         cvs.style.marginLeft = window.innerWidth * 0.001 + 'px';
+         cvs.style.marginTop = window.innerHeight * 0.025 + 'px';
+         
+         window.onorientationchange = function() {
+            checkOrientation();
+         };
+         
+         var gameControlCircle = Object.create(spritesObject);
+         gameControlCircle.image = control;
+         gameControlCircle.sourceSize = 128;
+         gameControlCircle.size = 64;
+         gameControlCircle.sourceX = 128;
+         gameControlCircle.sourceWidth = 128;
+         gameControlCircle.sourceHeight = 128;
+         
+         sprites.push(gameControlCircle);
+
+         function checkOrientation() {
+            if(innerWidth < 700 && screen.orientation.type == screenOrientation.primary) {
+               alert('rotate your device and refresh page');
+            }
+         }
+         
+         function render() {
+            if(sprites.length != 0) {
+               for(var i = 0; i < sprites.length; ++i) {
+                  var s = sprites[i];
+                  ctx.drawImage(s.image, s.sourceX, s.sourceY, s.sourceWidth, s.sourceHeight,
+                                s.x, s.y, s.size, s.size
+                  );
+               }
+            }
+         }
+      </script>
+   </body>
+</html>
