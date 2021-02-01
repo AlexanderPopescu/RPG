@@ -23,12 +23,20 @@
    <body onload="checkOrientation();">
       <canvas id="canvas"></canvas>
       <script type="text/javascript" charset="utf-8">
+         //get reference to html canvas
          var cvs = document.querySelector("canvas");
+         
+         //get properties and method for drawing
          var ctx = cvs.getContext("2d");
          
+         //set up basic variable for our game
          var gameOver = false;
          var pause = false;
+
+         //will container all sprites to be drawn
          var sprites = [];
+
+         //a default template for our image object
          var spritesObject = {
             image: undefined,
             x: 0,
@@ -42,6 +50,7 @@
             sourceSize: 0
          };
          
+         //create an instance of our game image
          var control = new Image();
          control.src = 'control_button.png';
          
@@ -78,6 +87,7 @@
             }
          }
          
+         //function to draw sprites
          function render() {
             if(sprites.length != 0) {
                for(var i = 0; i < sprites.length; ++i) {
